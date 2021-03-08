@@ -18,7 +18,7 @@ db = client.BankAPI
 users = db["users"]
 
 
-@app.route("/")
+
 @cross_origin()
 
 
@@ -42,7 +42,7 @@ class Register(Resource):
         password = postedData["password"]
 
         if UserExists(username):
-            return jsonify(genReturn(301, "invalid username"))
+            return jsonify(genReturn(301, "invalid username")), 301
 
         hashed_pw = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
 
@@ -55,7 +55,7 @@ class Register(Resource):
             }
         )
 
-        return jsonify(genReturn(200, "succesfully signed up to the API"))
+        return jsonify(genReturn(200, "succesfully signed up to the API")), 200
 
 
 def verifyPassword(username, password):
