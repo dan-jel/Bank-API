@@ -2,12 +2,15 @@ from flask import Flask, json, jsonify, request
 from flask_restful import Api, Resource
 from pymongo import MongoClient
 import bcrypt
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 api = Api(app)
+
+
 
 client = MongoClient("mongodb://db:27017")
 db = client.BankAPI
@@ -25,7 +28,7 @@ def UserExists(username):
     else:
         return True
 
-
+@cross_origin()
 class Register(Resource):
     def post(self):
         postedData = request.get_json()
@@ -90,7 +93,7 @@ def updateAccount(username, balance):
 def updateDebt(username, balance):
     users.update({"username": username}, {"$set": {"debt": balance}})
 
-
+@cross_origin()
 class Add(Resource):
     def post(self):
         postedData = request.get_json()
@@ -116,7 +119,7 @@ class Add(Resource):
 
         return jsonify(200, "the amount has been deposited succesfully")
 
-
+@cross_origin()
 class Transfer(Resource):
     def post(self):
         postedData = request.get_json()
@@ -150,7 +153,7 @@ class Transfer(Resource):
 
         return jsonify(genReturn(200, "transaction complete"))
 
-
+@cross_origin()
 class Balance(Resource):
     def post(self):
         postedData = request.get_json()
@@ -166,7 +169,7 @@ class Balance(Resource):
 
         return jsonify({"status": 200, "msg": balanceJson})
 
-
+@cross_origin()
 class TakeLoan(Resource):
     def post(self):
         postedData = request.get_json()
@@ -187,7 +190,7 @@ class TakeLoan(Resource):
 
         return jsonify(genReturn(200, "succesfully added the loan to your account"))
 
-
+@cross_origin()
 class PayLoan(Resource):
     def post(self):
         postedData = request.get_json()
@@ -218,6 +221,7 @@ api.add_resource(Transfer, "/transfer")
 api.add_resource(Balance, "/balance")
 api.add_resource(TakeLoan, "/takeloan")
 api.add_resource(PayLoan, "/payloan")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
