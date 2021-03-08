@@ -1,4 +1,4 @@
-from flask import Flask, json, jsonify, request,make_response
+from flask import Flask, json, jsonify, request
 from flask_restful import Api, Resource
 from pymongo import MongoClient
 import bcrypt
@@ -55,7 +55,7 @@ class Register(Resource):
             }
         )
 
-        return make_response(jsonify({"message":"succesfully signed up to the API"}), 200)
+        return jsonify(genReturn(200, "succesfully signed up"))
 
 
 def verifyPassword(username, password):
