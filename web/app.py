@@ -113,3 +113,109 @@ class Add(Resource):
         updateAccount(username, cash + amount)
 
         return jsonify(200, "the amount has been deposited succesfully")
+
+
+class Transfer(Resource):
+    def post(self):
+        postedData = request.get_json()
+
+        username = postedData["username"]
+        password = postedData["password"]
+        to = postedData["to"]
+        amount = postedData["amount"]
+
+        retJson, error = verifyCredentials(username, password)
+        if error:
+            return jsonify(retJson)
+
+        cash = cashWithUser(username)
+        if cash < amount:
+            return jsonify(genReturn(304, "not enough money on your account"))
+
+        if not UserExists(to):
+            return genReturn(301, "receriver username is invalid")
+
+        cash_from = cashWithUser(username)
+        cash_to = cashWithUser(to)
+        cash_bank = cashWithUser("BANK")
+
+        fee = amount / 100
+        amount = fee * 99
+
+        updateAccount("BANK", cash_bank + fee)
+        updateAccount(username, cash_from - amount)
+        updateAccount(to, cash_to + amount)
+
+        return jsonify(genReturn(200, "transaction complete"))
+
+
+class Balance(Resource):
+    def post(self):
+        postedData = request.get_json()
+
+        username = postedData["username"]
+        password = postedData["password"]
+
+        retJson, error = verifyCredentials(username, password)
+        if error:
+            return jsonify(retJson)
+
+        balanceJson = users.find({"username": username}, {"password": 0, "_id": 0})[0]
+
+        return jsonify({"status": 200, "msg": balanceJson})
+
+
+class TakeLoan(Resource):
+    def post(self):
+        postedData = request.get_json()
+
+        username = postedData["username"]
+        password = postedData["password"]
+        amount = postedData["amount"]
+
+        retJson, error = verifyCredentials(username, password)
+        if error:
+            return jsonify(retJson)
+
+        cash = cashWithUser(username)
+        debt = debtWithUser(username)
+
+        updateAccount(username, cash + amount)
+        updateDebt(username, debt + amount)
+
+        return jsonify(genReturn(200, "succesfully added the loan to your account"))
+
+
+class PayLoan(Resource):
+    def post(self):
+        postedData = request.get_json()
+
+        username = postedData["username"]
+        password = postedData["password"]
+        amount = postedData["amount"]
+
+        retJson, error = verifyCredentials(username, password)
+        if error:
+            return jsonify(retJson)
+
+        cash = cashWithUser(username)
+        debt = debtWithUser(username)
+
+        if cash < amount:
+            return jsonify(genReturn(303, "not enough money on your account"))
+
+        updateAccount(username, cash - amount)
+        updateDebt(username, debt - amount)
+
+        return jsonify(genReturn(200, "succesfully payed your loan to the bank"))
+
+
+api.add_resource(Register, "/register")
+api.add_resource(Add, "/add")
+api.add_resource(Transfer, "/transfer")
+api.add_resource(Balance, "/balance")
+api.add_resource(TakeLoan, "/takeloan")
+api.add_resource(PayLoan, "/payloan")
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0")
