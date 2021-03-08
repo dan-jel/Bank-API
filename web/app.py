@@ -12,9 +12,14 @@ api = Api(app)
 
 
 
+
 client = MongoClient("mongodb://db:27017")
 db = client.BankAPI
 users = db["users"]
+
+
+@app.route("/")
+@cross_origin()
 
 
 def genReturn(status, msg):
@@ -28,7 +33,7 @@ def UserExists(username):
     else:
         return True
 
-@cross_origin()
+
 class Register(Resource):
     def post(self):
         postedData = request.get_json()
@@ -93,7 +98,7 @@ def updateAccount(username, balance):
 def updateDebt(username, balance):
     users.update({"username": username}, {"$set": {"debt": balance}})
 
-@cross_origin()
+
 class Add(Resource):
     def post(self):
         postedData = request.get_json()
@@ -119,7 +124,7 @@ class Add(Resource):
 
         return jsonify(200, "the amount has been deposited succesfully")
 
-@cross_origin()
+
 class Transfer(Resource):
     def post(self):
         postedData = request.get_json()
@@ -153,7 +158,7 @@ class Transfer(Resource):
 
         return jsonify(genReturn(200, "transaction complete"))
 
-@cross_origin()
+
 class Balance(Resource):
     def post(self):
         postedData = request.get_json()
@@ -169,7 +174,7 @@ class Balance(Resource):
 
         return jsonify({"status": 200, "msg": balanceJson})
 
-@cross_origin()
+
 class TakeLoan(Resource):
     def post(self):
         postedData = request.get_json()
@@ -190,7 +195,7 @@ class TakeLoan(Resource):
 
         return jsonify(genReturn(200, "succesfully added the loan to your account"))
 
-@cross_origin()
+
 class PayLoan(Resource):
     def post(self):
         postedData = request.get_json()
