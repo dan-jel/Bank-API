@@ -10,8 +10,8 @@ Eine restful API die die Funktionalität einer Bank imitiert.
 
 ```json
 {
-  "username": "***",
-  "password": "***"
+  "username": "xxx",
+  "password": "xxx"
 }
 ```
 
@@ -19,8 +19,8 @@ Eine restful API die die Funktionalität einer Bank imitiert.
 
 ```json
 {
-  "username": "***",
-  "password": "***",
+  "username": "xxx",
+  "password": "xxx",
   "amount": 999
 }
 ```
@@ -29,9 +29,9 @@ Eine restful API die die Funktionalität einer Bank imitiert.
 
 ```json
 {
-  "username": "***",
-  "password": "***",
-  "to": "***",
+  "username": "xxx",
+  "password": "xxx",
+  "to": "xxx",
   "amount": 999
 }
 ```
@@ -40,8 +40,8 @@ Eine restful API die die Funktionalität einer Bank imitiert.
 
 ```json
 {
-  "username": "***",
-  "password": "***"
+  "username": "xxx",
+  "password": "xxx"
 }
 ```
 
@@ -49,8 +49,8 @@ Eine restful API die die Funktionalität einer Bank imitiert.
 
 ```json
 {
-  "username": "***",
-  "password": "***",
+  "username": "xxx",
+  "password": "xxx",
   "amount": 999
 }
 ```
@@ -59,8 +59,8 @@ Eine restful API die die Funktionalität einer Bank imitiert.
 
 ```json
 {
-  "username": "***",
-  "password": "***",
+  "username": "xxx",
+  "password": "xxx",
   "amount": 999
 }
 ```
@@ -80,6 +80,8 @@ sudo docker-compose build
 ```bash
 sudo docker-compose up
 ```
+
+<br>
 
 ## Check the DB
 
