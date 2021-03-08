@@ -10,3 +10,5 @@ services:
 
   db:
     build: ./db
+    ports:
+      - "27017:27017"
